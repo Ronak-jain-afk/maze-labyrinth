@@ -41,4 +41,4 @@ func _on_next_pressed() -> void:
 
 func _on_main_menu_pressed() -> void:
 	hide_victory()
-	get_tree().change_scene_to_file("res://main_menu.tscn")
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")

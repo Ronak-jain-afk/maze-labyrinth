@@ -172,14 +172,14 @@ func _on_resume_pressed() -> void:
 	var gs = get_node_or_null("/root/GameSettings")
 	if gs:
 		gs.is_resuming = true
-	get_tree().change_scene_to_file("res://game.tscn")
+	get_tree().change_scene_to_file("res://scenes/game.tscn")
 
 func _on_play_pressed() -> void:
 	_play_click_sound(800.0)
 	var gs = get_node_or_null("/root/GameSettings")
 	if gs:
 		gs.clear_save()
-	get_tree().change_scene_to_file("res://game.tscn")
+	get_tree().change_scene_to_file("res://scenes/game.tscn")
 
 func _on_difficulty_pressed() -> void:
 	_play_click_sound(500.0)

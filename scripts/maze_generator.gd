@@ -14,8 +14,8 @@ extends Node2D
 @onready var glitch_ui: CanvasLayer = $GlitchUI
 @onready var win_particles: CPUParticles2D = $WinParticles
 
-var enemy_scene: PackedScene = preload("res://enemy.tscn")
-var coin_scene: PackedScene = preload("res://coin.tscn")
+var enemy_scene: PackedScene = preload("res://scenes/enemy.tscn")
+var coin_scene: PackedScene = preload("res://scenes/coin.tscn")
 var spawned_enemies: Array = []
 var spawned_coins: Array = []
 
@@ -245,7 +245,7 @@ func _on_exit_area_body_entered(body: Node2D) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		get_tree().change_scene_to_file("res://main_menu.tscn")
+		get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 	elif event is InputEventKey and event.pressed and event.keycode == KEY_R:
 		generate_level(current_level)
 	elif event is InputEventKey and event.pressed and event.keycode == KEY_N:

@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://cx10k3yvgrqa3"]
 
-[ext_resource type="Script" path="res://maze_generator.gd" id="1_maze"]
+[ext_resource type="Script" path="res://scripts/maze_generator.gd" id="1_maze"]
 [ext_resource type="Texture2D" uid="uid://dmyhaqcbra00p" path="res://assets/PNG_Tiled/Road2.png" id="2_road"]
 [ext_resource type="Texture2D" uid="uid://chdjwytkcad16" path="res://icon.svg" id="3_icon"]
 [ext_resource type="Texture2D" path="res://assets/PNG_Tiled/Ground_grass.png" id="4_grass"]
-[ext_resource type="PackedScene" uid="uid://bi4vnastxoktj" path="res://player.tscn" id="5_player"]
-[ext_resource type="Script" path="res://hud.gd" id="6_hud"]
-[ext_resource type="Script" path="res://victory_ui.gd" id="7_vic"]
-[ext_resource type="PackedScene" path="res://glitch_ui.tscn" id="8_glitch"]
+[ext_resource type="PackedScene" uid="uid://bi4vnastxoktj" path="res://scenes/player.tscn" id="5_player"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="6_hud"]
+[ext_resource type="Script" path="res://scripts/victory_ui.gd" id="7_vic"]
+[ext_resource type="PackedScene" path="res://scenes/glitch_ui.tscn" id="8_glitch"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_walls"]
 texture = ExtResource("2_road")
