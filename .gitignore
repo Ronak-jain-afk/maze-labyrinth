@@ -1,0 +1,20 @@
+# Build & Export Outputs
+export/
+*.zip
+*.pck
+*.exe
+
+# Godot 4 import and build cache
+.godot/
+*.translation
+
+# Mono / C# builds
+.mono/
+[Bb]in/
+[Oo]bj/
+
+# OS and IDE temporary files
+.DS_Store
+Thumbs.db
+*.tmp
+*.log

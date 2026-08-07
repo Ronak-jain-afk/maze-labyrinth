@@ -1,0 +1,245 @@
+[gd_scene format=3 uid="uid://bi4vnastxoktj"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/Fighter/Idle.png" id="2_idle"]
+[ext_resource type="Texture2D" path="res://assets/Fighter/Run.png" id="3_run"]
+[ext_resource type="Texture2D" path="res://assets/Fighter/Attack_1.png" id="4_attack1"]
+[ext_resource type="Texture2D" path="res://assets/Fighter/Attack_2.png" id="5_attack2"]
+[ext_resource type="Texture2D" path="res://assets/Fighter/Attack_3.png" id="6_attack3"]
+
+[sub_resource type="AtlasTexture" id="idle_0"]
+atlas = ExtResource("2_idle")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="idle_1"]
+atlas = ExtResource("2_idle")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="idle_2"]
+atlas = ExtResource("2_idle")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="idle_3"]
+atlas = ExtResource("2_idle")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="idle_4"]
+atlas = ExtResource("2_idle")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="idle_5"]
+atlas = ExtResource("2_idle")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_0"]
+atlas = ExtResource("3_run")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_1"]
+atlas = ExtResource("3_run")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_2"]
+atlas = ExtResource("3_run")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_3"]
+atlas = ExtResource("3_run")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_4"]
+atlas = ExtResource("3_run")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_5"]
+atlas = ExtResource("3_run")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_6"]
+atlas = ExtResource("3_run")
+region = Rect2(768, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_7"]
+atlas = ExtResource("3_run")
+region = Rect2(896, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="att1_0"]
+atlas = ExtResource("4_attack1")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="att1_1"]
+atlas = ExtResource("4_attack1")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="att1_2"]
+atlas = ExtResource("4_attack1")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="att1_3"]
+atlas = ExtResource("4_attack1")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="att2_0"]
+atlas = ExtResource("5_attack2")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="att2_1"]
+atlas = ExtResource("5_attack2")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="att2_2"]
+atlas = ExtResource("5_attack2")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="att3_0"]
+atlas = ExtResource("6_attack3")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="att3_1"]
+atlas = ExtResource("6_attack3")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="att3_2"]
+atlas = ExtResource("6_attack3")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="att3_3"]
+atlas = ExtResource("6_attack3")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fighter"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("att1_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("att1_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("att1_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("att1_3")
+}],
+"loop": false,
+"name": &"attack1",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("att2_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("att2_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("att2_2")
+}],
+"loop": false,
+"name": &"attack2",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("att3_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("att3_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("att3_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("att3_3")
+}],
+"loop": false,
+"name": &"attack3",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("idle_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_5")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("run_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_7")
+}],
+"loop": true,
+"name": &"run",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_player"]
+radius = 4.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_attack"]
+radius = 8.0
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+y_sort_enabled = true
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -5)
+scale = Vector2(0.13, 0.13)
+sprite_frames = SubResource("SpriteFrames_fighter")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_player")
+
+[node name="AttackArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+position = Vector2(8, 0)
+shape = SubResource("CircleShape2D_attack")
+disabled = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(4.5, 4.5)
+position_smoothing_enabled = true
+position_smoothing_speed = 10.0

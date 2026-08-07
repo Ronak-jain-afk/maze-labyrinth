@@ -1,0 +1,437 @@
+[gd_scene format=3 uid="uid://c6u7x8y9z0123"]
+
+[ext_resource type="Script" path="res://main_menu.gd" id="1_menu"]
+[ext_resource type="Texture2D" path="res://assets/menu_bg.jpg" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://chdjwytkcad16" path="res://icon.svg" id="4_icon"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_glass"]
+content_margin_left = 28.0
+content_margin_top = 24.0
+content_margin_right = 28.0
+content_margin_bottom = 24.0
+bg_color = Color(0.06, 0.1, 0.16, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.6, 0.9, 0.5)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.65)
+shadow_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.12, 0.2, 0.3, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.55, 0.8, 0.5)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.2, 0.35, 0.52, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.75, 1.0, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_resume"]
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.12, 0.5, 0.75, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.8, 1.0, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0.1, 0.5, 0.8, 0.4)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_play"]
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.12, 0.55, 0.4, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.9, 0.65, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0.1, 0.6, 0.4, 0.4)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_play_hover"]
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.16, 0.68, 0.5, 1.0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5, 1.0, 0.8, 1.0)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0.2, 0.8, 0.5, 0.6)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal"]
+content_margin_left = 24.0
+content_margin_top = 24.0
+content_margin_right = 24.0
+content_margin_bottom = 24.0
+bg_color = Color(0.06, 0.1, 0.15, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.6, 0.9, 0.7)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.7)
+shadow_size = 24
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="BackgroundTexture" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="DimOverlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.05, 0.1, 0.45)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="MainLayout" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainLayout"]
+layout_mode = 2
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="LeftMenuPanel" type="PanelContainer" parent="MainLayout/HBoxContainer"]
+custom_minimum_size = Vector2(360, 420)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_glass")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainLayout/HBoxContainer/LeftMenuPanel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="HeaderContainer" type="VBoxContainer" parent="MainLayout/HBoxContainer/LeftMenuPanel/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 4
+
+[node name="IconContainer" type="CenterContainer" parent="MainLayout/HBoxContainer/LeftMenuPanel/VBoxContainer/HeaderContainer"]
+layout_mode = 2
+
+[node name="MenuIcon" type="TextureRect" parent="MainLayout/HBoxContainer/LeftMenuPanel/VBoxContainer/HeaderContainer/IconContainer"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture = ExtResource("4_icon")
+expand_mode = 1
+
+[node name="TitleLabel" type="Label" parent="MainLayout/HBoxContainer/LeftMenuPanel/VBoxContainer/HeaderContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.96, 1, 1)
+theme_override_colors/font_outline_color = Color(0.05, 0.25, 0.45, 0.9)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 24
+text = "MAZE LABYRINTH"
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="MainLayout/HBoxContainer/LeftMenuPanel/VBoxContainer/HeaderContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.8, 0.95, 0.85)
+theme_override_font_sizes/font_size = 12
+text = "Master procedural infinite mazes"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MainLayout/HBoxContainer/LeftMenuPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ButtonContainer" type="VBoxContainer" parent="MainLayout/HBoxContainer/LeftMenuPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ResumeButton" type="Button" parent="MainLayout/HBoxContainer/LeftMenuPanel/VBoxContainer/ButtonContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+pivot_offset = Vector2(152, 22)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_resume")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_resume")
+text = "RESUME GAME"
+
+[node name="PlayButton" type="Button" parent="MainLayout/HBoxContainer/LeftMenuPanel/VBoxContainer/ButtonContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+pivot_offset = Vector2(152, 22)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_play")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_play_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_play")
+text = "PLAY GAME"
+
+[node name="DifficultyButton" type="Button" parent="MainLayout/HBoxContainer/LeftMenuPanel/VBoxContainer/ButtonContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+pivot_offset = Vector2(152, 20)
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+text = "Difficulty: Medium (25x17)"
+
+[node name="HowToPlayButton" type="Button" parent="MainLayout/HBoxContainer/LeftMenuPanel/VBoxContainer/ButtonContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+pivot_offset = Vector2(152, 20)
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+text = "How to Play"
+
+[node name="QuitButton" type="Button" parent="MainLayout/HBoxContainer/LeftMenuPanel/VBoxContainer/ButtonContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+pivot_offset = Vector2(152, 20)
+theme_override_colors/font_color = Color(0.95, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+text = "Quit Game"
+
+[node name="RightCharPanel" type="PanelContainer" parent="MainLayout/HBoxContainer"]
+custom_minimum_size = Vector2(400, 420)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_glass")
+
+[node name="CharVBox" type="VBoxContainer" parent="MainLayout/HBoxContainer/RightCharPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="CharHeaderLabel" type="Label" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.85, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "SELECT HERO"
+horizontal_alignment = 1
+
+[node name="PreviewControl" type="Control" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox"]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+
+[node name="CharSprite" type="AnimatedSprite2D" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox/PreviewControl"]
+unique_name_in_owner = true
+position = Vector2(172, 70)
+scale = Vector2(0.85, 0.85)
+
+[node name="NavHBox" type="HBoxContainer" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="PrevCharBtn" type="Button" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox/NavHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(38, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+text = "<"
+
+[node name="CharNameLabel" type="Label" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox/NavHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.4, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "FIGHTER"
+horizontal_alignment = 1
+
+[node name="NextCharBtn" type="Button" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox/NavHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(38, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+text = ">"
+
+[node name="HSeparator2" type="HSeparator" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox"]
+layout_mode = 2
+
+[node name="StatsVBox" type="VBoxContainer" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SpeedHBox" type="HBoxContainer" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox/StatsVBox"]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox/StatsVBox/SpeedHBox"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "SPEED:"
+
+[node name="SpeedValLabel" type="Label" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox/StatsVBox/SpeedHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 1, 0.7, 1)
+theme_override_font_sizes/font_size = 13
+text = "[██████░░░░] 100 px/s"
+
+[node name="PowerHBox" type="HBoxContainer" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox/StatsVBox"]
+layout_mode = 2
+
+[node name="Lbl" type="Label" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox/StatsVBox/PowerHBox"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "POWER:"
+
+[node name="PowerValLabel" type="Label" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox/StatsVBox/PowerHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.4, 1)
+theme_override_font_sizes/font_size = 13
+text = "[████████░░] 100 dmg"
+
+[node name="TraitLabel" type="Label" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox/StatsVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.9, 0.95, 0.85)
+theme_override_font_sizes/font_size = 12
+text = "Master Duelist — Balanced speed & 3-hit combo strikes"
+autowrap_mode = 2
+
+[node name="EquipButton" type="Button" parent="MainLayout/HBoxContainer/RightCharPanel/CharVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+text = "EQUIPPED"
+
+[node name="HowToPlayModal" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -210.0
+offset_right = 240.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(240, 210)
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HowToPlayModal"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="HowToPlayModal/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "HOW TO PLAY"
+horizontal_alignment = 1
+
+[node name="Instructions" type="RichTextLabel" parent="HowToPlayModal/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 13
+bbcode_enabled = true
+text = "[color=#a0d8ef]Movement:[/color] Use [b]WASD[/b] or [b]Arrow Keys[/b] to navigate corridors.
+
+[color=#a0d8ef]Attack & Combat:[/color] Press [b]Spacebar[/b], [b]Left Click[/b], or [b]J[/b] to execute 3-hit sword combos and defeat enemy Shinobis!
+
+[color=#a0d8ef]Coins & Score:[/color] Collect floating [color=#ffd700]Gold Coins[/color] (+100 pts) scattered throughout corridors to maximize your score!
+
+[color=#a0d8ef]Goal:[/color] Reach the [color=#ffd700]Golden Exit Portal[/color] as fast as possible.
+
+[color=#a0d8ef]Shortcuts:[/color]
+• [b]Q[/b] - Return to Main Menu
+• [b]N[/b] - Load Next Level
+• [b]ESC[/b] - Pause / Return to Main Menu"
+
+[node name="CloseModalButton" type="Button" parent="HowToPlayModal/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+text = "Close"

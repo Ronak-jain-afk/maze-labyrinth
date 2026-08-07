@@ -1,0 +1,186 @@
+[gd_scene format=3 uid="uid://cx10k3yvgrqa3"]
+
+[ext_resource type="Script" path="res://maze_generator.gd" id="1_maze"]
+[ext_resource type="Texture2D" uid="uid://dmyhaqcbra00p" path="res://assets/PNG_Tiled/Road2.png" id="2_road"]
+[ext_resource type="Texture2D" uid="uid://chdjwytkcad16" path="res://icon.svg" id="3_icon"]
+[ext_resource type="Texture2D" path="res://assets/PNG_Tiled/Ground_grass.png" id="4_grass"]
+[ext_resource type="PackedScene" uid="uid://bi4vnastxoktj" path="res://player.tscn" id="5_player"]
+[ext_resource type="Script" path="res://hud.gd" id="6_hud"]
+[ext_resource type="Script" path="res://victory_ui.gd" id="7_vic"]
+[ext_resource type="PackedScene" path="res://glitch_ui.tscn" id="8_glitch"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_walls"]
+texture = ExtResource("2_road")
+1:15/0 = 0
+1:15/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_grass"]
+texture = ExtResource("4_grass")
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_game"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_walls")
+sources/1 = SubResource("TileSetAtlasSource_grass")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_exit"]
+radius = 8.0
+
+[node name="Game" type="Node2D" unique_id=404800945]
+y_sort_enabled = true
+script = ExtResource("1_maze")
+
+[node name="FloorLayer" type="TileMapLayer" parent="." unique_id=1871183738]
+tile_set = SubResource("TileSet_game")
+
+[node name="WallLayer" type="TileMapLayer" parent="." unique_id=1871183739]
+y_sort_enabled = true
+tile_set = SubResource("TileSet_game")
+
+[node name="Player" parent="." unique_id=1198717272 instance=ExtResource("5_player")]
+position = Vector2(24, 24)
+
+[node name="ExitArea" type="Area2D" parent="." unique_id=987654321]
+position = Vector2(376, 248)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitArea" unique_id=987654322]
+shape = SubResource("CircleShape2D_exit")
+
+[node name="Sprite2D" type="Sprite2D" parent="ExitArea" unique_id=987654323]
+modulate = Color(1, 0.85, 0.2, 0.9)
+scale = Vector2(0.11, 0.11)
+texture = ExtResource("3_icon")
+
+[node name="WinParticles" type="CPUParticles2D" parent="." unique_id=987654324]
+emitting = false
+amount = 45
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.85
+spread = 180.0
+gravity = Vector2(0, 40)
+initial_velocity_min = 60.0
+initial_velocity_max = 120.0
+scale_amount_min = 3.0
+scale_amount_max = 6.0
+color = Color(1, 0.84, 0.0, 1)
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=888888888]
+script = ExtResource("6_hud")
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD" unique_id=888888889]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/MarginContainer" unique_id=888888890]
+layout_mode = 2
+
+[node name="LevelLabel" type="Label" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888891]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "LEVEL: 1"
+
+[node name="Spacer1" type="Control" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888892]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TimerLabel" type="Label" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888893]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "TIME: 0.0s"
+
+[node name="Spacer2" type="Control" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888894]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StepsLabel" type="Label" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888895]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 1, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "STEPS: 0"
+
+[node name="Spacer3" type="Control" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888896]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScoreLabel" type="Label" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888897]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "SCORE: 0"
+
+[node name="VictoryUI" type="CanvasLayer" parent="." unique_id=777777777]
+script = ExtResource("7_vic")
+
+[node name="Control" type="Control" parent="VictoryUI" unique_id=777777778]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VictoryUI/Control" unique_id=777777779]
+custom_minimum_size = Vector2(320, 200)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -100.0
+offset_right = 160.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VictoryUI/Control/PanelContainer" unique_id=777777780]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="VictoryUI/Control/PanelContainer/VBoxContainer" unique_id=777777781]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.3, 1)
+theme_override_font_sizes/font_size = 22
+text = "MAZE CLEARED!"
+horizontal_alignment = 1
+
+[node name="StatsLabel" type="Label" parent="VictoryUI/Control/PanelContainer/VBoxContainer" unique_id=777777782]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Level 1
+Time: 12.4s
+Steps: 45"
+horizontal_alignment = 1
+
+[node name="ButtonContainer" type="HBoxContainer" parent="VictoryUI/Control/PanelContainer/VBoxContainer" unique_id=777777783]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="MainMenuButton" type="Button" parent="VictoryUI/Control/PanelContainer/VBoxContainer/ButtonContainer" unique_id=777777784]
+layout_mode = 2
+text = "Main Menu (Q)"
+
+[node name="NextButton" type="Button" parent="VictoryUI/Control/PanelContainer/VBoxContainer/ButtonContainer" unique_id=777777785]
+layout_mode = 2
+text = "Next Level (N)"
+
+[node name="GlitchUI" parent="." instance=ExtResource("8_glitch")]
+
+[connection signal="body_entered" from="ExitArea" to="." method="_on_exit_area_body_entered"]
