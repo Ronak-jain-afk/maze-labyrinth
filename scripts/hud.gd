@@ -5,6 +5,7 @@ extends CanvasLayer
 @onready var steps_label: Label = $MarginContainer/HBoxContainer/StepsLabel
 @onready var score_label: Label = $MarginContainer/HBoxContainer/ScoreLabel
 @onready var dash_label: Label = $MarginContainer/HBoxContainer/DashLabel
+@onready var powerup_label: Label = $MarginContainer/HBoxContainer/PowerUpLabel
 
 func update_timer(seconds: float) -> void:
 	if timer_label:
@@ -30,3 +31,20 @@ func update_dash_cooldown(current: float, _max_val: float) -> void:
 		else:
 			dash_label.text = "DASH: %.1fs" % current
 			dash_label.add_theme_color_override("font_color", Color(0.9, 0.6, 0.4))
+
+func update_powerup_status(type_name: String, remaining: float) -> void:
+	if not powerup_label:
+		return
+	if remaining <= 0.0:
+		powerup_label.text = ""
+	else:
+		match type_name:
+			"SPEED":
+				powerup_label.text = "⚡ SPEED: %.1fs" % remaining
+				powerup_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.2))
+			"MAGNET":
+				powerup_label.text = "🧲 MAGNET: %.1fs" % remaining
+				powerup_label.add_theme_color_override("font_color", Color(0.3, 0.8, 1.0))
+			"FREEZE":
+				powerup_label.text = "⏱️ FREEZE: %.1fs" % remaining
+				powerup_label.add_theme_color_override("font_color", Color(0.9, 0.4, 1.0))

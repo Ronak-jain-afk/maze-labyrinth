@@ -9,13 +9,28 @@ signal collected(amount: int)
 
 var base_y: float = 0.0
 var is_collected: bool = false
+var player_ref: Node2D = null
 
 func _ready() -> void:
 	base_y = position.y
 	body_entered.connect(_on_body_entered)
 
 func _process(delta: float) -> void:
-	if not is_collected and sprite:
+	if is_collected:
+		return
+		
+	if not player_ref:
+		player_ref = get_tree().get_first_node_in_group("player")
+		if not player_ref:
+			player_ref = get_parent().get_node_or_null("Player")
+			
+	if player_ref and is_instance_valid(player_ref) and player_ref.get("magnet_timer") != null:
+		if float(player_ref.get("magnet_timer")) > 0.0:
+			var dist = global_position.distance_to(player_ref.global_position)
+			if dist < 140.0:
+				global_position = global_position.move_toward(player_ref.global_position, 160.0 * delta)
+
+	if sprite:
 		# Floating bob animation
 		var float_offset = sin(Time.get_ticks_msec() * 0.006) * 2.5
 		sprite.position.y = float_offset

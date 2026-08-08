@@ -16,8 +16,13 @@ extends Node2D
 
 var enemy_scene: PackedScene = preload("res://scenes/enemy.tscn")
 var coin_scene: PackedScene = preload("res://scenes/coin.tscn")
+var powerup_scene: PackedScene = preload("res://scenes/powerup.tscn")
+var spike_trap_scene: PackedScene = preload("res://scenes/spike_trap.tscn")
+
 var spawned_enemies: Array = []
 var spawned_coins: Array = []
+var spawned_powerups: Array = []
+var spawned_traps: Array = []
 
 var current_level: int = 1
 var current_seed: int = 42
@@ -25,12 +30,16 @@ var grid: Array = []
 var is_game_active: bool = false
 var elapsed_time: float = 0.0
 var total_score: int = 0
+var time_freeze_timer: float = 0.0
 
 func _ready() -> void:
+	add_to_group("maze")
 	if player.has_signal("step_taken"):
 		player.step_taken.connect(_on_player_step_taken)
 	if player.has_signal("dash_cooldown_updated"):
 		player.dash_cooldown_updated.connect(hud_ui.update_dash_cooldown)
+	if player.has_signal("powerup_status_updated"):
+		player.powerup_status_updated.connect(hud_ui.update_powerup_status)
 	
 	var gs = get_node_or_null("/root/GameSettings")
 	if gs:
@@ -46,7 +55,18 @@ func _ready() -> void:
 	if auto_generate_on_start:
 		generate_level(current_level)
 
+func trigger_time_freeze(duration: float) -> void:
+	time_freeze_timer = duration
+	for enemy in spawned_enemies:
+		if is_instance_valid(enemy) and enemy.has_method("stun"):
+			enemy.stun(duration)
+
 func _process(delta: float) -> void:
+	if time_freeze_timer > 0.0:
+		time_freeze_timer = max(0.0, time_freeze_timer - delta)
+		if hud_ui:
+			hud_ui.update_powerup_status("FREEZE", time_freeze_timer)
+
 	if is_game_active:
 		elapsed_time += delta
 		hud_ui.update_timer(elapsed_time)
@@ -75,8 +95,11 @@ func generate_level(level_num: int) -> void:
 	_setup_camera(w, h)
 	_spawn_enemies_for_level(w, h, current_seed)
 	_spawn_coins_for_level(w, h, current_seed)
+	_spawn_powerups_for_level(w, h, current_seed)
+	_spawn_traps_for_level(w, h, current_seed)
 	
 	elapsed_time = 0.0
+	time_freeze_timer = 0.0
 	is_game_active = true
 	player.reset_stats()
 	player.is_active = true
@@ -204,6 +227,60 @@ func _spawn_coins_for_level(w: int, h: int, seed_val: int) -> void:
 		coin_instance.collected.connect(_on_coin_collected)
 		add_child(coin_instance)
 		spawned_coins.append(coin_instance)
+
+func _spawn_powerups_for_level(w: int, h: int, seed_val: int) -> void:
+	for pup in spawned_powerups:
+		if is_instance_valid(pup):
+			pup.queue_free()
+	spawned_powerups.clear()
+
+	var pup_count = clamp(int(w * 0.1), 1, 3)
+	var candidate_cells: Array[Vector2i] = []
+	for x in range(3, w - 2):
+		for y in range(2, h - 2):
+			if grid[x][y] == 0:
+				candidate_cells.append(Vector2i(x, y))
+
+	var rng = RandomNumberGenerator.new()
+	rng.seed = seed_val + 555
+	candidate_cells.shuffle()
+
+	var p_types = [0, 1, 2] # SPEED_BOOTS, COIN_MAGNET, TIME_FREEZE
+
+	for i in range(min(pup_count, candidate_cells.size())):
+		var cell = candidate_cells[i]
+		var pup_instance = powerup_scene.instantiate()
+		pup_instance.powerup_type = p_types[i % p_types.size()]
+		pup_instance.global_position = Vector2(cell.x * 16 + 8, cell.y * 16 + 8)
+		add_child(pup_instance)
+		spawned_powerups.append(pup_instance)
+
+func _spawn_traps_for_level(w: int, h: int, seed_val: int) -> void:
+	for trap in spawned_traps:
+		if is_instance_valid(trap):
+			trap.queue_free()
+	spawned_traps.clear()
+
+	if current_level < 2:
+		return
+
+	var trap_count = clamp(current_level - 1, 1, 4)
+	var candidate_cells: Array[Vector2i] = []
+	for x in range(4, w - 3):
+		for y in range(2, h - 2):
+			if grid[x][y] == 0:
+				candidate_cells.append(Vector2i(x, y))
+
+	var rng = RandomNumberGenerator.new()
+	rng.seed = seed_val + 999
+	candidate_cells.shuffle()
+
+	for i in range(min(trap_count, candidate_cells.size())):
+		var cell = candidate_cells[i]
+		var trap_instance = spike_trap_scene.instantiate()
+		trap_instance.global_position = Vector2(cell.x * 16 + 8, cell.y * 16 + 8)
+		add_child(trap_instance)
+		spawned_traps.append(trap_instance)
 
 func _setup_camera(w: int, h: int) -> void:
 	var camera: Camera2D = player.get_node_or_null("Camera2D")

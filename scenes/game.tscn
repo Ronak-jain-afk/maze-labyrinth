@@ -115,6 +115,18 @@ text = "DASH: READY [E]"
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="PowerUpLabel" type="Label" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888900]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = ""
+
+[node name="Spacer4" type="Control" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888901]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="StepsLabel" type="Label" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888895]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 1, 0.8, 1)
@@ -123,7 +135,7 @@ theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 18
 text = "STEPS: 0"
 
-[node name="Spacer4" type="Control" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888896]
+[node name="Spacer5" type="Control" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888896]
 layout_mode = 2
 size_flags_horizontal = 3
 

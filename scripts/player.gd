@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 signal step_taken
 signal dash_cooldown_updated(current: float, max_val: float)
+signal powerup_status_updated(type_name: String, remaining: float)
 
 @export var speed: float = 100.0
 @export var acceleration: float = 1600.0
@@ -31,6 +32,10 @@ var dash_direction: Vector2 = Vector2.RIGHT
 const DASH_DURATION: float = 0.35
 const DASH_COOLDOWN_TIME: float = 1.5
 const DASH_SPEED_MULTIPLIER: float = 2.5
+
+# Power-Up Timers
+var speed_boost_timer: float = 0.0
+var magnet_timer: float = 0.0
 
 func _ready() -> void:
 	apply_character_settings()
@@ -87,6 +92,20 @@ func _add_anim_from_sheet(sf: SpriteFrames, anim_name: String, path: String, fps
 		atlas.region = Rect2(i * frame_w, 0, frame_w, frame_h)
 		sf.add_frame(anim_name, atlas)
 
+func apply_powerup(type_name: String, duration: float) -> void:
+	if type_name == "SPEED":
+		speed_boost_timer = duration
+		powerup_status_updated.emit("SPEED", duration)
+	elif type_name == "MAGNET":
+		magnet_timer = duration
+		powerup_status_updated.emit("MAGNET", duration)
+	elif type_name == "FREEZE":
+		var maze_node = get_tree().get_first_node_in_group("maze")
+		if not maze_node:
+			maze_node = get_parent()
+		if maze_node and maze_node.has_method("trigger_time_freeze"):
+			maze_node.trigger_time_freeze(duration)
+
 func is_invincible_now() -> bool:
 	return is_dashing or is_invincible
 
@@ -103,6 +122,15 @@ func _physics_process(delta: float) -> void:
 		dash_cooldown = max(0.0, dash_cooldown - delta)
 		dash_cooldown_updated.emit(dash_cooldown, DASH_COOLDOWN_TIME)
 
+	# Power-up Timers
+	if speed_boost_timer > 0.0:
+		speed_boost_timer = max(0.0, speed_boost_timer - delta)
+		powerup_status_updated.emit("SPEED", speed_boost_timer)
+
+	if magnet_timer > 0.0:
+		magnet_timer = max(0.0, magnet_timer - delta)
+		powerup_status_updated.emit("MAGNET", magnet_timer)
+
 	if not is_active:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 		move_and_slide()
@@ -112,7 +140,8 @@ func _physics_process(delta: float) -> void:
 	# Dash Execution
 	if is_dashing:
 		dash_timer -= delta
-		velocity = dash_direction * (speed * DASH_SPEED_MULTIPLIER)
+		var dash_spd_boost = 1.4 if speed_boost_timer > 0.0 else 1.0
+		velocity = dash_direction * (speed * DASH_SPEED_MULTIPLIER * dash_spd_boost)
 		if dash_timer <= 0.0:
 			is_dashing = false
 			is_invincible = false
@@ -136,7 +165,8 @@ func _physics_process(delta: float) -> void:
 	if not is_attacking:
 		input_vector = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		
-		var effective_speed = speed * (0.5 if is_shielding else 1.0)
+		var spd_multiplier = (0.5 if is_shielding else 1.0) * (1.4 if speed_boost_timer > 0.0 else 1.0)
+		var effective_speed = speed * spd_multiplier
 		
 		if input_vector != Vector2.ZERO:
 			var target_velocity = input_vector.normalized() * effective_speed
@@ -234,6 +264,11 @@ func _update_visuals() -> void:
 	if not sprite or is_attacking:
 		return
 		
+	if speed_boost_timer > 0.0:
+		sprite.modulate = Color(1.2, 1.2, 0.4)
+	else:
+		sprite.modulate = Color(1.0, 1.0, 1.0)
+		
 	if is_dashing:
 		if sprite.animation != "dash" and sprite.sprite_frames.has_animation("dash"):
 			sprite.play("dash")
@@ -266,6 +301,8 @@ func reset_stats() -> void:
 	is_invincible = false
 	dash_timer = 0.0
 	dash_cooldown = 0.0
+	speed_boost_timer = 0.0
+	magnet_timer = 0.0
 	combo_index = 1
 	combo_reset_timer = 0.0
 	if attack_shape:
