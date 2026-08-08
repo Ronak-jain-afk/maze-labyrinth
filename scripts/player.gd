@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 signal step_taken
+signal dash_cooldown_updated(current: float, max_val: float)
 
 @export var speed: float = 100.0
 @export var acceleration: float = 1600.0
@@ -19,6 +20,17 @@ var is_active: bool = true
 var is_attacking: bool = false
 var combo_index: int = 1
 var combo_reset_timer: float = 0.0
+
+# Ability Variables
+var is_shielding: bool = false
+var is_dashing: bool = false
+var is_invincible: bool = false
+var dash_timer: float = 0.0
+var dash_cooldown: float = 0.0
+var dash_direction: Vector2 = Vector2.RIGHT
+const DASH_DURATION: float = 0.35
+const DASH_COOLDOWN_TIME: float = 1.5
+const DASH_SPEED_MULTIPLIER: float = 2.5
 
 func _ready() -> void:
 	apply_character_settings()
@@ -43,6 +55,8 @@ func apply_character_settings() -> void:
 	_add_anim_from_sheet(new_frames, "attack1", folder + "Attack_1.png", 12.0, false)
 	_add_anim_from_sheet(new_frames, "attack2", folder + "Attack_2.png", 12.0, false)
 	_add_anim_from_sheet(new_frames, "attack3", folder + "Attack_3.png", 12.0, false)
+	_add_anim_from_sheet(new_frames, "shield", folder + "Shield.png", 8.0, true)
+	_add_anim_from_sheet(new_frames, "dash", folder + "Jump.png", 14.0, false)
 	
 	if sprite:
 		sprite.sprite_frames = new_frames
@@ -73,11 +87,21 @@ func _add_anim_from_sheet(sf: SpriteFrames, anim_name: String, path: String, fps
 		atlas.region = Rect2(i * frame_w, 0, frame_w, frame_h)
 		sf.add_frame(anim_name, atlas)
 
+func is_invincible_now() -> bool:
+	return is_dashing or is_invincible
+
+func is_shielding_now() -> bool:
+	return is_shielding and not is_dashing and not is_attacking
+
 func _physics_process(delta: float) -> void:
 	if combo_reset_timer > 0.0:
 		combo_reset_timer -= delta
 		if combo_reset_timer <= 0.0:
 			combo_index = 1
+
+	if dash_cooldown > 0.0:
+		dash_cooldown = max(0.0, dash_cooldown - delta)
+		dash_cooldown_updated.emit(dash_cooldown, DASH_COOLDOWN_TIME)
 
 	if not is_active:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
@@ -85,15 +109,37 @@ func _physics_process(delta: float) -> void:
 		_update_visuals()
 		return
 
+	# Dash Execution
+	if is_dashing:
+		dash_timer -= delta
+		velocity = dash_direction * (speed * DASH_SPEED_MULTIPLIER)
+		if dash_timer <= 0.0:
+			is_dashing = false
+			is_invincible = false
+		move_and_slide()
+		_update_visuals()
+		return
+
+	# Trigger Shadow Dash (E key)
+	if Input.is_key_pressed(KEY_E) and dash_cooldown <= 0.0 and not is_attacking:
+		_trigger_dash()
+		return
+
+	# Trigger Attack
 	if Input.is_action_just_pressed("attack") and not is_attacking:
 		_perform_attack()
 		return
 
+	# Shield Stance (Shift / Right Click / K)
+	is_shielding = (Input.is_key_pressed(KEY_SHIFT) or Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) or Input.is_key_pressed(KEY_K)) and not is_attacking
+
 	if not is_attacking:
 		input_vector = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		
+		var effective_speed = speed * (0.5 if is_shielding else 1.0)
+		
 		if input_vector != Vector2.ZERO:
-			var target_velocity = input_vector.normalized() * speed
+			var target_velocity = input_vector.normalized() * effective_speed
 			
 			if is_equal_approx(abs(input_vector.x), 1.0) and input_vector.y == 0.0:
 				var nudge = _get_corner_nudge(input_vector, Vector2.UP, Vector2.DOWN)
@@ -120,6 +166,22 @@ func _physics_process(delta: float) -> void:
 			step_taken.emit()
 	
 	_update_visuals()
+
+func _trigger_dash() -> void:
+	is_dashing = true
+	is_invincible = true
+	dash_timer = DASH_DURATION
+	dash_cooldown = DASH_COOLDOWN_TIME
+	
+	if input_vector != Vector2.ZERO:
+		dash_direction = input_vector.normalized()
+	elif sprite.flip_h:
+		dash_direction = Vector2.LEFT
+	else:
+		dash_direction = Vector2.RIGHT
+		
+	if sprite.sprite_frames.has_animation("dash"):
+		sprite.play("dash")
 
 func _perform_attack() -> void:
 	is_attacking = true
@@ -172,6 +234,17 @@ func _update_visuals() -> void:
 	if not sprite or is_attacking:
 		return
 		
+	if is_dashing:
+		if sprite.animation != "dash" and sprite.sprite_frames.has_animation("dash"):
+			sprite.play("dash")
+		sprite.flip_h = dash_direction.x < 0
+		return
+
+	if is_shielding:
+		if sprite.animation != "shield" and sprite.sprite_frames.has_animation("shield"):
+			sprite.play("shield")
+		return
+		
 	if velocity.length() > 5.0:
 		if sprite.animation != "run" and sprite.sprite_frames.has_animation("run"):
 			sprite.play("run")
@@ -188,6 +261,11 @@ func reset_stats() -> void:
 	steps_count = 0
 	is_active = true
 	is_attacking = false
+	is_shielding = false
+	is_dashing = false
+	is_invincible = false
+	dash_timer = 0.0
+	dash_cooldown = 0.0
 	combo_index = 1
 	combo_reset_timer = 0.0
 	if attack_shape:

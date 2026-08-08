@@ -29,6 +29,8 @@ var total_score: int = 0
 func _ready() -> void:
 	if player.has_signal("step_taken"):
 		player.step_taken.connect(_on_player_step_taken)
+	if player.has_signal("dash_cooldown_updated"):
+		player.dash_cooldown_updated.connect(hud_ui.update_dash_cooldown)
 	
 	var gs = get_node_or_null("/root/GameSettings")
 	if gs:
@@ -83,6 +85,7 @@ func generate_level(level_num: int) -> void:
 	hud_ui.update_steps(0)
 	hud_ui.update_timer(0.0)
 	hud_ui.update_score(total_score)
+	hud_ui.update_dash_cooldown(0.0, 1.5)
 
 func _build_maze(w: int, h: int, seed_val: int) -> void:
 	var rng = RandomNumberGenerator.new()

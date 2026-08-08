@@ -16,13 +16,39 @@ var current_dir: Vector2 = Vector2.RIGHT
 var player_ref: Node2D = null
 var last_seen_pos: Vector2 = Vector2.ZERO
 var is_defeated: bool = false
+var is_stunned: bool = false
+var stun_timer: float = 0.0
 
 func _ready() -> void:
 	hitbox.body_entered.connect(_on_hitbox_body_entered)
 	_pick_random_direction()
 
+func stun(duration: float = 1.5, knockback_dir: Vector2 = Vector2.ZERO) -> void:
+	if is_defeated:
+		return
+	is_stunned = true
+	stun_timer = duration
+	current_state = State.PATROL
+	if knockback_dir != Vector2.ZERO:
+		global_position += knockback_dir * 18.0
+	
+	# Stun visual pulse effect
+	var tween = create_tween()
+	tween.tween_property(sprite, "modulate", Color(0.3, 0.9, 1.0, 1.0), 0.1)
+	tween.tween_property(sprite, "modulate", Color(1.0, 1.0, 1.0, 0.4), 0.1)
+	tween.tween_property(sprite, "modulate", Color(0.3, 0.9, 1.0, 1.0), 0.1)
+
 func _physics_process(delta: float) -> void:
 	if is_defeated:
+		return
+
+	if is_stunned:
+		stun_timer -= delta
+		velocity = Vector2.ZERO
+		move_and_slide()
+		if stun_timer <= 0.0:
+			is_stunned = false
+			sprite.modulate = Color(1.0, 1.0, 1.0)
 		return
 
 	if not player_ref:
@@ -66,7 +92,7 @@ func defeat() -> void:
 	tween.tween_callback(queue_free)
 
 func _check_line_of_sight() -> void:
-	if is_defeated or not player_ref or not is_instance_valid(player_ref):
+	if is_defeated or is_stunned or not player_ref or not is_instance_valid(player_ref):
 		return
 
 	var to_player = player_ref.global_position - global_position
@@ -117,7 +143,7 @@ func _pick_new_direction() -> void:
 	current_dir = -current_dir
 
 func _update_visuals() -> void:
-	if sprite and not is_defeated:
+	if sprite and not is_defeated and not is_stunned:
 		if current_state == State.CHASE:
 			sprite.modulate = Color(1.0, 0.3, 0.3)
 			sprite.speed_scale = 1.4
@@ -131,7 +157,16 @@ func _update_visuals() -> void:
 			sprite.flip_h = false
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
-	if is_defeated:
+	if is_defeated or is_stunned:
 		return
 	if body == player_ref or body.name == "Player" or body.has_signal("step_taken"):
+		if body.has_method("is_invincible_now") and body.is_invincible_now():
+			# Player is dashing - ignore hit!
+			return
+		if body.has_method("is_shielding_now") and body.is_shielding_now():
+			# Player parried with shield! Stun and knock back enemy!
+			var knockback = (global_position - body.global_position).normalized()
+			stun(1.5, knockback)
+			return
+			
 		player_caught.emit()
