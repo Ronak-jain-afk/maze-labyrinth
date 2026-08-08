@@ -9,9 +9,8 @@
 ### Option 1: Direct Play (Windows Desktop - No Installation Required)
 
 1. Go to the official **[GitHub Releases Page](https://github.com/Ronak-jain-afk/maze-labyrinth/releases/tag/v1.0.0)**.
-2. Under **Assets**, click **`MazeLabyrinth.zip`** to download it.
-3. Extract the downloaded `.zip` folder.
-4. Double-click **`MazeLabyrinth.exe`** to start playing instantly!
+2. Under **Assets**, click **`MazeLabyrinth.exe`** (or **`MazeLabyrinth.zip`**) to download.
+3. Double-click **`MazeLabyrinth.exe`** to start playing instantly!
 
 ---
 
