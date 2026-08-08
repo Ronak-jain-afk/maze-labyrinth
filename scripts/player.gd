@@ -15,6 +15,10 @@ signal key_status_changed(has_key: bool)
 @onready var attack_area: Area2D = $AttackArea
 @onready var attack_shape: CollisionShape2D = $AttackArea/CollisionShape2D
 
+var camera: Camera2D = null
+var camera_shake_intensity: float = 0.0
+var camera_shake_timer: float = 0.0
+
 var total_distance: float = 0.0
 var steps_count: int = 0
 var input_vector: Vector2 = Vector2.ZERO
@@ -30,6 +34,7 @@ var is_invincible: bool = false
 var dash_timer: float = 0.0
 var dash_cooldown: float = 0.0
 var dash_direction: Vector2 = Vector2.RIGHT
+var ghost_trail_timer: float = 0.0
 const DASH_DURATION: float = 0.35
 const DASH_COOLDOWN_TIME: float = 1.5
 const DASH_SPEED_MULTIPLIER: float = 2.5
@@ -40,9 +45,14 @@ var magnet_timer: float = 0.0
 var has_key: bool = false
 
 func _ready() -> void:
+	camera = get_node_or_null("Camera2D")
 	apply_character_settings()
 	if sprite and not sprite.animation_finished.is_connected(_on_animation_finished):
 		sprite.animation_finished.connect(_on_animation_finished)
+
+func trigger_camera_shake(intensity: float = 4.0, duration: float = 0.2) -> void:
+	camera_shake_intensity = intensity
+	camera_shake_timer = duration
 
 func apply_character_settings() -> void:
 	var gs = get_node_or_null("/root/GameSettings")
@@ -96,6 +106,7 @@ func _add_anim_from_sheet(sf: SpriteFrames, anim_name: String, path: String, fps
 
 func collect_key() -> void:
 	has_key = true
+	trigger_camera_shake(5.0, 0.3)
 	key_status_changed.emit(true)
 	var maze_node = get_tree().get_first_node_in_group("maze")
 	if not maze_node:
@@ -104,6 +115,7 @@ func collect_key() -> void:
 		maze_node.unlock_exit_portal()
 
 func apply_powerup(type_name: String, duration: float) -> void:
+	trigger_camera_shake(3.0, 0.15)
 	if type_name == "SPEED":
 		speed_boost_timer = duration
 		powerup_status_updated.emit("SPEED", duration)
@@ -122,6 +134,18 @@ func is_invincible_now() -> bool:
 
 func is_shielding_now() -> bool:
 	return is_shielding and not is_dashing and not is_attacking
+
+func _process(delta: float) -> void:
+	# Camera Shake Processing
+	if camera_shake_timer > 0.0:
+		camera_shake_timer -= delta
+		if camera:
+			camera.offset = Vector2(
+				randf_range(-camera_shake_intensity, camera_shake_intensity),
+				randf_range(-camera_shake_intensity, camera_shake_intensity)
+			)
+		if camera_shake_timer <= 0.0 and camera:
+			camera.offset = Vector2.ZERO
 
 func _physics_process(delta: float) -> void:
 	if combo_reset_timer > 0.0:
@@ -148,9 +172,14 @@ func _physics_process(delta: float) -> void:
 		_update_visuals()
 		return
 
-	# Dash Execution
+	# Dash Execution with Ghost Trail
 	if is_dashing:
 		dash_timer -= delta
+		ghost_trail_timer -= delta
+		if ghost_trail_timer <= 0.0:
+			ghost_trail_timer = 0.05
+			_spawn_ghost_trail()
+			
 		var dash_spd_boost = 1.4 if speed_boost_timer > 0.0 else 1.0
 		velocity = dash_direction * (speed * DASH_SPEED_MULTIPLIER * dash_spd_boost)
 		if dash_timer <= 0.0:
@@ -208,11 +237,28 @@ func _physics_process(delta: float) -> void:
 	
 	_update_visuals()
 
+func _spawn_ghost_trail() -> void:
+	if not sprite:
+		return
+	var ghost = Sprite2D.new()
+	ghost.texture = sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
+	ghost.global_position = sprite.global_position
+	ghost.scale = sprite.scale
+	ghost.flip_h = sprite.flip_h
+	ghost.modulate = Color(0.3, 0.7, 1.0, 0.6)
+	get_parent().add_child(ghost)
+	
+	var tween = create_tween()
+	tween.tween_property(ghost, "modulate:a", 0.0, 0.25)
+	tween.tween_callback(ghost.queue_free)
+
 func _trigger_dash() -> void:
 	is_dashing = true
 	is_invincible = true
 	dash_timer = DASH_DURATION
 	dash_cooldown = DASH_COOLDOWN_TIME
+	ghost_trail_timer = 0.0
+	trigger_camera_shake(2.5, 0.15)
 	
 	if input_vector != Vector2.ZERO:
 		dash_direction = input_vector.normalized()
@@ -227,6 +273,7 @@ func _trigger_dash() -> void:
 func _perform_attack() -> void:
 	is_attacking = true
 	combo_reset_timer = 1.0
+	trigger_camera_shake(2.0, 0.1)
 	
 	var anim_name = "attack" + str(combo_index)
 	combo_index = (combo_index % 3) + 1
@@ -241,6 +288,7 @@ func _perform_attack() -> void:
 		if attack_area:
 			for body in attack_area.get_overlapping_bodies():
 				if body.has_method("defeat"):
+					trigger_camera_shake(6.0, 0.25)
 					body.defeat()
 	)
 
