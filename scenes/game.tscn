@@ -127,6 +127,18 @@ text = ""
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="KeyLabel" type="Label" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888902]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.4, 0.4, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "KEY: 🔒 NEEDED"
+
+[node name="Spacer5" type="Control" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888903]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="StepsLabel" type="Label" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888895]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 1, 0.8, 1)
@@ -135,7 +147,7 @@ theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 18
 text = "STEPS: 0"
 
-[node name="Spacer5" type="Control" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888896]
+[node name="Spacer6" type="Control" parent="HUD/MarginContainer/HBoxContainer" unique_id=888888896]
 layout_mode = 2
 size_flags_horizontal = 3
 

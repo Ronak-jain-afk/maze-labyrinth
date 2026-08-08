@@ -3,6 +3,7 @@ extends CharacterBody2D
 signal step_taken
 signal dash_cooldown_updated(current: float, max_val: float)
 signal powerup_status_updated(type_name: String, remaining: float)
+signal key_status_changed(has_key: bool)
 
 @export var speed: float = 100.0
 @export var acceleration: float = 1600.0
@@ -33,9 +34,10 @@ const DASH_DURATION: float = 0.35
 const DASH_COOLDOWN_TIME: float = 1.5
 const DASH_SPEED_MULTIPLIER: float = 2.5
 
-# Power-Up Timers
+# Power-Up & Key Variables
 var speed_boost_timer: float = 0.0
 var magnet_timer: float = 0.0
+var has_key: bool = false
 
 func _ready() -> void:
 	apply_character_settings()
@@ -91,6 +93,15 @@ func _add_anim_from_sheet(sf: SpriteFrames, anim_name: String, path: String, fps
 		atlas.atlas = tex
 		atlas.region = Rect2(i * frame_w, 0, frame_w, frame_h)
 		sf.add_frame(anim_name, atlas)
+
+func collect_key() -> void:
+	has_key = true
+	key_status_changed.emit(true)
+	var maze_node = get_tree().get_first_node_in_group("maze")
+	if not maze_node:
+		maze_node = get_parent()
+	if maze_node and maze_node.has_method("unlock_exit_portal"):
+		maze_node.unlock_exit_portal()
 
 func apply_powerup(type_name: String, duration: float) -> void:
 	if type_name == "SPEED":
@@ -299,12 +310,14 @@ func reset_stats() -> void:
 	is_shielding = false
 	is_dashing = false
 	is_invincible = false
+	has_key = false
 	dash_timer = 0.0
 	dash_cooldown = 0.0
 	speed_boost_timer = 0.0
 	magnet_timer = 0.0
 	combo_index = 1
 	combo_reset_timer = 0.0
+	key_status_changed.emit(false)
 	if attack_shape:
 		attack_shape.disabled = true
 	apply_character_settings()

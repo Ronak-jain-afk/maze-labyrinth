@@ -9,6 +9,7 @@ extends Node2D
 @onready var wall_layer: TileMapLayer = $WallLayer
 @onready var player: CharacterBody2D = $Player
 @onready var exit_area: Area2D = $ExitArea
+@onready var exit_sprite: Sprite2D = $ExitArea/Sprite2D
 @onready var victory_ui: CanvasLayer = $VictoryUI
 @onready var hud_ui: CanvasLayer = $HUD
 @onready var glitch_ui: CanvasLayer = $GlitchUI
@@ -18,16 +19,19 @@ var enemy_scene: PackedScene = preload("res://scenes/enemy.tscn")
 var coin_scene: PackedScene = preload("res://scenes/coin.tscn")
 var powerup_scene: PackedScene = preload("res://scenes/powerup.tscn")
 var spike_trap_scene: PackedScene = preload("res://scenes/spike_trap.tscn")
+var key_scene: PackedScene = preload("res://scenes/key.tscn")
 
 var spawned_enemies: Array = []
 var spawned_coins: Array = []
 var spawned_powerups: Array = []
 var spawned_traps: Array = []
+var spawned_key: Node2D = null
 
 var current_level: int = 1
 var current_seed: int = 42
 var grid: Array = []
 var is_game_active: bool = false
+var is_exit_unlocked: bool = false
 var elapsed_time: float = 0.0
 var total_score: int = 0
 var time_freeze_timer: float = 0.0
@@ -40,6 +44,8 @@ func _ready() -> void:
 		player.dash_cooldown_updated.connect(hud_ui.update_dash_cooldown)
 	if player.has_signal("powerup_status_updated"):
 		player.powerup_status_updated.connect(hud_ui.update_powerup_status)
+	if player.has_signal("key_status_changed"):
+		player.key_status_changed.connect(hud_ui.update_key_status)
 	
 	var gs = get_node_or_null("/root/GameSettings")
 	if gs:
@@ -60,6 +66,19 @@ func trigger_time_freeze(duration: float) -> void:
 	for enemy in spawned_enemies:
 		if is_instance_valid(enemy) and enemy.has_method("stun"):
 			enemy.stun(duration)
+
+func unlock_exit_portal() -> void:
+	is_exit_unlocked = true
+	if exit_sprite:
+		var tween = create_tween()
+		tween.tween_property(exit_sprite, "modulate", Color(2.0, 1.5, 0.4, 1.0), 0.2)
+		tween.tween_property(exit_sprite, "modulate", Color(1.0, 0.85, 0.2, 0.95), 0.2)
+	if win_particles:
+		win_particles.emitting = true
+		get_tree().create_timer(1.0).timeout.connect(func():
+			if is_instance_valid(win_particles) and not victory_ui.panel.visible:
+				win_particles.emitting = false
+		)
 
 func _process(delta: float) -> void:
 	if time_freeze_timer > 0.0:
@@ -97,10 +116,15 @@ func generate_level(level_num: int) -> void:
 	_spawn_coins_for_level(w, h, current_seed)
 	_spawn_powerups_for_level(w, h, current_seed)
 	_spawn_traps_for_level(w, h, current_seed)
+	_spawn_key_for_level(w, h, current_seed)
 	
 	elapsed_time = 0.0
 	time_freeze_timer = 0.0
 	is_game_active = true
+	is_exit_unlocked = false
+	if exit_sprite:
+		exit_sprite.modulate = Color(0.4, 0.2, 0.4, 0.6)
+		
 	player.reset_stats()
 	player.is_active = true
 	victory_ui.hide_victory()
@@ -109,6 +133,7 @@ func generate_level(level_num: int) -> void:
 	hud_ui.update_timer(0.0)
 	hud_ui.update_score(total_score)
 	hud_ui.update_dash_cooldown(0.0, 1.5)
+	hud_ui.update_key_status(false)
 
 func _build_maze(w: int, h: int, seed_val: int) -> void:
 	var rng = RandomNumberGenerator.new()
@@ -282,6 +307,26 @@ func _spawn_traps_for_level(w: int, h: int, seed_val: int) -> void:
 		add_child(trap_instance)
 		spawned_traps.append(trap_instance)
 
+func _spawn_key_for_level(w: int, h: int, seed_val: int) -> void:
+	if is_instance_valid(spawned_key):
+		spawned_key.queue_free()
+		spawned_key = null
+
+	var candidate_cells: Array[Vector2i] = []
+	for x in range(w / 2, w - 2):
+		for y in range(1, h - 2):
+			if grid[x][y] == 0 and not (x == w - 1 and y == h - 2):
+				candidate_cells.append(Vector2i(x, y))
+
+	if candidate_cells.size() > 0:
+		var rng = RandomNumberGenerator.new()
+		rng.seed = seed_val + 4321
+		var chosen_cell = candidate_cells[rng.randi() % candidate_cells.size()]
+		var key_inst = key_scene.instantiate()
+		key_inst.global_position = Vector2(chosen_cell.x * 16 + 8, chosen_cell.y * 16 + 8)
+		add_child(key_inst)
+		spawned_key = key_inst
+
 func _setup_camera(w: int, h: int) -> void:
 	var camera: Camera2D = player.get_node_or_null("Camera2D")
 	if camera:
@@ -313,6 +358,13 @@ func _on_player_caught() -> void:
 
 func _on_exit_area_body_entered(body: Node2D) -> void:
 	if body == player and is_game_active:
+		if not is_exit_unlocked and not player.has_key:
+			if exit_sprite:
+				var tween = create_tween()
+				tween.tween_property(exit_sprite, "modulate", Color(1.0, 0.2, 0.2, 0.9), 0.1)
+				tween.tween_property(exit_sprite, "modulate", Color(0.4, 0.2, 0.4, 0.6), 0.15)
+			return
+
 		is_game_active = false
 		player.is_active = false
 		win_particles.emitting = true

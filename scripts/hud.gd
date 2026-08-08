@@ -6,6 +6,7 @@ extends CanvasLayer
 @onready var score_label: Label = $MarginContainer/HBoxContainer/ScoreLabel
 @onready var dash_label: Label = $MarginContainer/HBoxContainer/DashLabel
 @onready var powerup_label: Label = $MarginContainer/HBoxContainer/PowerUpLabel
+@onready var key_label: Label = $MarginContainer/HBoxContainer/KeyLabel
 
 func update_timer(seconds: float) -> void:
 	if timer_label:
@@ -48,3 +49,13 @@ func update_powerup_status(type_name: String, remaining: float) -> void:
 			"FREEZE":
 				powerup_label.text = "⏱️ FREEZE: %.1fs" % remaining
 				powerup_label.add_theme_color_override("font_color", Color(0.9, 0.4, 1.0))
+
+func update_key_status(has_key: bool) -> void:
+	if not key_label:
+		return
+	if has_key:
+		key_label.text = "KEY: 🔑 ACQUIRED"
+		key_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2))
+	else:
+		key_label.text = "KEY: 🔒 NEEDED"
+		key_label.add_theme_color_override("font_color", Color(0.8, 0.4, 0.4))
