@@ -1,0 +1,160 @@
+[gd_scene format=3 uid="uid://s1a2m3u4r5a6"]
+
+[ext_resource type="Script" path="res://scripts/samurai_enemy.gd" id="1_sam"]
+[ext_resource type="Texture2D" path="res://assets/Samurai/Idle.png" id="2_idle"]
+[ext_resource type="Texture2D" path="res://assets/Samurai/Run.png" id="3_run"]
+
+[sub_resource type="AtlasTexture" id="idle_0"]
+atlas = ExtResource("2_idle")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="idle_1"]
+atlas = ExtResource("2_idle")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="idle_2"]
+atlas = ExtResource("2_idle")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="idle_3"]
+atlas = ExtResource("2_idle")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="idle_4"]
+atlas = ExtResource("2_idle")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="idle_5"]
+atlas = ExtResource("2_idle")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_0"]
+atlas = ExtResource("3_run")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_1"]
+atlas = ExtResource("3_run")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_2"]
+atlas = ExtResource("3_run")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_3"]
+atlas = ExtResource("3_run")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_4"]
+atlas = ExtResource("3_run")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_5"]
+atlas = ExtResource("3_run")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_6"]
+atlas = ExtResource("3_run")
+region = Rect2(768, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="run_7"]
+atlas = ExtResource("3_run")
+region = Rect2(896, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_samurai"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("idle_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("idle_5")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("run_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("run_7")
+}],
+"loop": true,
+"name": &"run",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sam"]
+radius = 4.5
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hitbox"]
+radius = 6.0
+
+[node name="SamuraiEnemy" type="CharacterBody2D" groups=["enemy"]]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_sam")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -5)
+scale = Vector2(0.14, 0.14)
+sprite_frames = SubResource("SpriteFrames_samurai")
+animation = &"run"
+autoplay = "run"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_sam")
+
+[node name="HitBox" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+shape = SubResource("CircleShape2D_hitbox")
+
+[node name="HPLabel" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -18.0
+offset_right = 16.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 8
+text = "███"
+horizontal_alignment = 1

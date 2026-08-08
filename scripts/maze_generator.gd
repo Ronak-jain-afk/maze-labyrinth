@@ -16,6 +16,8 @@ extends Node2D
 @onready var win_particles: CPUParticles2D = $WinParticles
 
 var enemy_scene: PackedScene = preload("res://scenes/enemy.tscn")
+var samurai_scene: PackedScene = preload("res://scenes/samurai_enemy.tscn")
+var boss_scene: PackedScene = preload("res://scenes/boss_enemy.tscn")
 var coin_scene: PackedScene = preload("res://scenes/coin.tscn")
 var powerup_scene: PackedScene = preload("res://scenes/powerup.tscn")
 var spike_trap_scene: PackedScene = preload("res://scenes/spike_trap.tscn")
@@ -203,12 +205,6 @@ func _spawn_enemies_for_level(w: int, h: int, seed_val: int) -> void:
 			enemy.queue_free()
 	spawned_enemies.clear()
 
-	var enemy_count = 1
-	if w >= 33:
-		enemy_count = 4
-	elif w >= 25:
-		enemy_count = 2
-
 	var candidate_cells: Array[Vector2i] = []
 	for x in range(4, w - 1):
 		for y in range(1, h - 1):
@@ -219,9 +215,33 @@ func _spawn_enemies_for_level(w: int, h: int, seed_val: int) -> void:
 	rng.seed = seed_val + 777
 	candidate_cells.shuffle()
 
+	# Check for Level 5 Boss Encounter
+	if current_level % 5 == 0:
+		if candidate_cells.size() > 0:
+			var boss_cell = candidate_cells[0]
+			var boss_inst = boss_scene.instantiate()
+			boss_inst.global_position = Vector2(boss_cell.x * 16 + 8, boss_cell.y * 16 + 8)
+			boss_inst.player_caught.connect(_on_player_caught)
+			boss_inst.boss_defeated.connect(func():
+				_on_coin_collected(1000)
+				unlock_exit_portal()
+			)
+			add_child(boss_inst)
+			spawned_enemies.append(boss_inst)
+		return
+
+	# Regular Enemies & Samurai Tanks
+	var enemy_count = 1
+	if w >= 33:
+		enemy_count = 4
+	elif w >= 25:
+		enemy_count = 2
+
 	for i in range(min(enemy_count, candidate_cells.size())):
 		var cell = candidate_cells[i]
-		var enemy_instance = enemy_scene.instantiate()
+		# Spawn Samurai Tank every 3rd enemy on level 3+
+		var sc = samurai_scene if (current_level >= 3 and i % 2 == 1) else enemy_scene
+		var enemy_instance = sc.instantiate()
 		enemy_instance.global_position = Vector2(cell.x * 16 + 8, cell.y * 16 + 8)
 		enemy_instance.player_caught.connect(_on_player_caught)
 		add_child(enemy_instance)
