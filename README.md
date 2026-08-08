@@ -4,6 +4,29 @@
 
 ---
 
+## Downloads & Playing the Game
+
+### Option 1: Direct Play (Windows Desktop - No Installation Required)
+
+1. Go to the official **[GitHub Releases Page](https://github.com/Ronak-jain-afk/maze-labyrinth/releases/tag/v1.0.0)**.
+2. Under **Assets**, click **`MazeLabyrinth.zip`** to download it.
+3. Extract the downloaded `.zip` folder.
+4. Double-click **`MazeLabyrinth.exe`** to start playing instantly!
+
+---
+
+### Option 2: Run from Source (Godot Engine)
+
+1. Clone or download this repository:
+   ```bash
+   git clone https://github.com/Ronak-jain-afk/maze-labyrinth.git
+   ```
+2. Open **Godot Engine 4.7+**.
+3. Import the project folder containing `project.godot`.
+4. Press `F5` (or click Play) to launch the game!
+
+---
+
 ## Game Screenshots
 
 | Main Menu & Hero Hub | Character Stats & Selection | Gameplay & Combat |
@@ -46,20 +69,3 @@
 - **Engine**: Godot Engine 4.7 (Forward+ Renderer)
 - **Language**: GDScript
 - **Audio**: Custom Synthesized 8-bit PCM Chiptunes & Audio Effects
-
----
-
-## Downloads & Releases
-
-Pre-compiled standalone Windows executables are available on the [GitHub Releases](https://github.com/Ronak-jain-afk/maze-labyrinth/releases) page.
-
----
-
-## Running from Source
-
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/Ronak-jain-afk/maze-labyrinth.git
-   ```
-2. Open the project folder in **Godot Engine 4.7+**.
-3. Press `F5` to play!
