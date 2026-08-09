@@ -12,6 +12,7 @@ extends Node2D
 @onready var exit_sprite: Sprite2D = $ExitArea/Sprite2D
 @onready var victory_ui: CanvasLayer = $VictoryUI
 @onready var hud_ui: CanvasLayer = $HUD
+@onready var shop_ui: CanvasLayer = $ShopUI
 @onready var glitch_ui: CanvasLayer = $GlitchUI
 @onready var win_particles: CPUParticles2D = $WinParticles
 
@@ -97,6 +98,9 @@ func _on_player_step_taken() -> void:
 
 func _on_coin_collected(amount: int) -> void:
 	total_score += amount
+	var gs = get_node_or_null("/root/GameSettings")
+	if gs:
+		gs.total_coins += amount
 	hud_ui.update_score(total_score)
 
 func generate_level(level_num: int) -> void:
@@ -239,7 +243,6 @@ func _spawn_enemies_for_level(w: int, h: int, seed_val: int) -> void:
 
 	for i in range(min(enemy_count, candidate_cells.size())):
 		var cell = candidate_cells[i]
-		# Spawn Samurai Tank every 3rd enemy on level 3+
 		var sc = samurai_scene if (current_level >= 3 and i % 2 == 1) else enemy_scene
 		var enemy_instance = sc.instantiate()
 		enemy_instance.global_position = Vector2(cell.x * 16 + 8, cell.y * 16 + 8)
@@ -359,6 +362,10 @@ func _setup_camera(w: int, h: int) -> void:
 func _on_player_caught() -> void:
 	if not is_game_active:
 		return
+		
+	if player and player.has_method("try_extra_life_rescue") and player.try_extra_life_rescue():
+		return
+
 	is_game_active = false
 	player.is_active = false
 	
@@ -402,3 +409,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		generate_level(current_level)
 	elif event is InputEventKey and event.pressed and event.keycode == KEY_N:
 		generate_level(current_level + 1)
+	elif event is InputEventKey and event.pressed and event.keycode == KEY_S:
+		if shop_ui and shop_ui.has_method("show_shop"):
+			shop_ui.show_shop()

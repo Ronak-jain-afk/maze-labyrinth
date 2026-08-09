@@ -79,6 +79,22 @@ func apply_character_settings() -> void:
 		sprite.sprite_frames = new_frames
 		sprite.play("idle")
 
+func try_extra_life_rescue() -> bool:
+	var gs = get_node_or_null("/root/GameSettings")
+	if gs and gs.relic_extra_life and not gs.has_extra_life_used:
+		gs.has_extra_life_used = true
+		is_invincible = true
+		trigger_camera_shake(8.0, 0.4)
+		if sprite:
+			var tween = create_tween()
+			tween.tween_property(sprite, "modulate", Color(0.4, 2.0, 0.6, 1.0), 0.15)
+			tween.tween_property(sprite, "modulate", Color(1.0, 1.0, 1.0, 1.0), 0.2)
+		get_tree().create_timer(1.5).timeout.connect(func():
+			is_invincible = false
+		)
+		return true
+	return false
+
 func _add_anim_from_sheet(sf: SpriteFrames, anim_name: String, path: String, fps: float, loop: bool) -> void:
 	if not ResourceLoader.exists(path):
 		return
@@ -136,7 +152,6 @@ func is_shielding_now() -> bool:
 	return is_shielding and not is_dashing and not is_attacking
 
 func _process(delta: float) -> void:
-	# Camera Shake Processing
 	if camera_shake_timer > 0.0:
 		camera_shake_timer -= delta
 		if camera:

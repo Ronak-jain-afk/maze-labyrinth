@@ -1,0 +1,169 @@
+[gd_scene format=3 uid="uid://s1h2o3p4u5i6"]
+
+[ext_resource type="Script" path="res://scripts/shop_ui.gd" id="1_shop"]
+
+[node name="ShopUI" type="CanvasLayer"]
+layer = 5
+script = ExtResource("1_shop")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7)
+
+[node name="PanelContainer" type="PanelContainer" parent="Control"]
+custom_minimum_size = Vector2(440, 320)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -160.0
+offset_right = 220.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HeaderContainer" type="HBoxContainer" parent="Control/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Control/PanelContainer/VBoxContainer/HeaderContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 20
+text = "🏛️ MERCHANT RELIC SHOP"
+
+[node name="CoinsLabel" type="Label" parent="Control/PanelContainer/VBoxContainer/HeaderContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "COINS: 🪙 0"
+
+[node name="HSeparator" type="HSeparator" parent="Control/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RelicList" type="VBoxContainer" parent="Control/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SharpBladeItem" type="HBoxContainer" parent="Control/PanelContainer/VBoxContainer/RelicList"]
+layout_mode = 2
+
+[node name="Info" type="VBoxContainer" parent="Control/PanelContainer/VBoxContainer/RelicList/SharpBladeItem"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="Control/PanelContainer/VBoxContainer/RelicList/SharpBladeItem/Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.4, 1)
+theme_override_font_sizes/font_size = 14
+text = "🗡️ Sharp Blade"
+
+[node name="Desc" type="Label" parent="Control/PanelContainer/VBoxContainer/RelicList/SharpBladeItem/Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+text = "+25% Attack Slash Area & Range"
+
+[node name="BuyButton" type="Button" parent="Control/PanelContainer/VBoxContainer/RelicList/SharpBladeItem"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "BUY (150 🪙)"
+
+[node name="HermesBootsItem" type="HBoxContainer" parent="Control/PanelContainer/VBoxContainer/RelicList"]
+layout_mode = 2
+
+[node name="Info" type="VBoxContainer" parent="Control/PanelContainer/VBoxContainer/RelicList/HermesBootsItem"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="Control/PanelContainer/VBoxContainer/RelicList/HermesBootsItem/Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.4, 1)
+theme_override_font_sizes/font_size = 14
+text = "⚡ Boots of Hermes"
+
+[node name="Desc" type="Label" parent="Control/PanelContainer/VBoxContainer/RelicList/HermesBootsItem/Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+text = "+15% Permanent Hero Movement Speed"
+
+[node name="BuyButton" type="Button" parent="Control/PanelContainer/VBoxContainer/RelicList/HermesBootsItem"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "BUY (200 🪙)"
+
+[node name="ParryMasterItem" type="HBoxContainer" parent="Control/PanelContainer/VBoxContainer/RelicList"]
+layout_mode = 2
+
+[node name="Info" type="VBoxContainer" parent="Control/PanelContainer/VBoxContainer/RelicList/ParryMasterItem"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="Control/PanelContainer/VBoxContainer/RelicList/ParryMasterItem/Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.4, 1)
+theme_override_font_sizes/font_size = 14
+text = "🛡️ Parry Master"
+
+[node name="Desc" type="Label" parent="Control/PanelContainer/VBoxContainer/RelicList/ParryMasterItem/Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+text = "Parry stuns enemies 2.5s and reflects damage"
+
+[node name="BuyButton" type="Button" parent="Control/PanelContainer/VBoxContainer/RelicList/ParryMasterItem"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "BUY (250 🪙)"
+
+[node name="ExtraLifeItem" type="HBoxContainer" parent="Control/PanelContainer/VBoxContainer/RelicList"]
+layout_mode = 2
+
+[node name="Info" type="VBoxContainer" parent="Control/PanelContainer/VBoxContainer/RelicList/ExtraLifeItem"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="Control/PanelContainer/VBoxContainer/RelicList/ExtraLifeItem/Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.4, 1)
+theme_override_font_sizes/font_size = 14
+text = "💚 Extra Life Charm"
+
+[node name="Desc" type="Label" parent="Control/PanelContainer/VBoxContainer/RelicList/ExtraLifeItem/Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+text = "Prevents defeat once per maze level!"
+
+[node name="BuyButton" type="Button" parent="Control/PanelContainer/VBoxContainer/RelicList/ExtraLifeItem"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "BUY (350 🪙)"
+
+[node name="HSeparator2" type="HSeparator" parent="Control/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="Control/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "RETURN TO MAZE (Esc)"

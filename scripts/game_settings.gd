@@ -10,6 +10,14 @@ var sound_enabled: bool = true
 var is_resuming: bool = false
 var resume_level: int = 1
 var resume_score: int = 0
+var total_coins: int = 0
+
+# Passive Relics
+var relic_sharp_blade: bool = false
+var relic_parry_master: bool = false
+var relic_boots_hermes: bool = false
+var relic_extra_life: bool = false
+var has_extra_life_used: bool = false
 
 const SAVE_PATH = "user://savegame.cfg"
 
@@ -28,26 +36,36 @@ func get_character_name(char_type: CharacterType = selected_character) -> String
 			return "FIGHTER"
 
 func get_character_speed(char_type: CharacterType = selected_character) -> float:
+	var base_spd = 100.0
 	match char_type:
 		CharacterType.FIGHTER:
-			return 100.0
+			base_spd = 100.0
 		CharacterType.SHINOBI:
-			return 125.0
+			base_spd = 125.0
 		CharacterType.SAMURAI:
-			return 85.0
+			base_spd = 85.0
 		_:
-			return 100.0
+			base_spd = 100.0
+			
+	if relic_boots_hermes:
+		base_spd *= 1.15
+	return base_spd
 
 func get_character_attack_scale(char_type: CharacterType = selected_character) -> float:
+	var base_scale = 1.0
 	match char_type:
 		CharacterType.FIGHTER:
-			return 1.0
+			base_scale = 1.0
 		CharacterType.SHINOBI:
-			return 0.85
+			base_scale = 0.85
 		CharacterType.SAMURAI:
-			return 1.45
+			base_scale = 1.45
 		_:
-			return 1.0
+			base_scale = 1.0
+			
+	if relic_sharp_blade:
+		base_scale *= 1.25
+	return base_scale
 
 func get_character_trait(char_type: CharacterType = selected_character) -> String:
 	match char_type:
@@ -111,8 +129,13 @@ func save_game(level: int, score: int) -> void:
 	var config = ConfigFile.new()
 	config.set_value("game", "level", level)
 	config.set_value("game", "score", score)
+	config.set_value("game", "coins", total_coins)
 	config.set_value("game", "difficulty", int(current_difficulty))
 	config.set_value("game", "character", int(selected_character))
+	config.set_value("relics", "sharp_blade", relic_sharp_blade)
+	config.set_value("relics", "parry_master", relic_parry_master)
+	config.set_value("relics", "boots_hermes", relic_boots_hermes)
+	config.set_value("relics", "extra_life", relic_extra_life)
 	config.save(SAVE_PATH)
 
 func has_save_file() -> bool:
@@ -124,8 +147,13 @@ func load_save_data() -> bool:
 	if config.load(SAVE_PATH) == OK:
 		resume_level = config.get_value("game", "level", 1)
 		resume_score = config.get_value("game", "score", 0)
+		total_coins = config.get_value("game", "coins", 0)
 		current_difficulty = config.get_value("game", "difficulty", int(Difficulty.MEDIUM)) as Difficulty
 		selected_character = config.get_value("game", "character", int(CharacterType.FIGHTER)) as CharacterType
+		relic_sharp_blade = config.get_value("relics", "sharp_blade", false)
+		relic_parry_master = config.get_value("relics", "parry_master", false)
+		relic_boots_hermes = config.get_value("relics", "boots_hermes", false)
+		relic_extra_life = config.get_value("relics", "extra_life", false)
 		is_resuming = true
 		return true
 	return false
@@ -134,6 +162,12 @@ func clear_save() -> void:
 	is_resuming = false
 	resume_level = 1
 	resume_score = 0
+	total_coins = 0
+	relic_sharp_blade = false
+	relic_parry_master = false
+	relic_boots_hermes = false
+	relic_extra_life = false
+	has_extra_life_used = false
 	if DirAccess.remove_absolute(SAVE_PATH) != OK:
 		pass
 

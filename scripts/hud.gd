@@ -7,6 +7,16 @@ extends CanvasLayer
 @onready var dash_label: Label = $MarginContainer/HBoxContainer/DashLabel
 @onready var powerup_label: Label = $MarginContainer/HBoxContainer/PowerUpLabel
 @onready var key_label: Label = $MarginContainer/HBoxContainer/KeyLabel
+@onready var shop_btn: Button = $MarginContainer/HBoxContainer/ShopButton
+
+func _ready() -> void:
+	if shop_btn:
+		shop_btn.pressed.connect(_on_shop_pressed)
+
+func _on_shop_pressed() -> void:
+	var shop_ui = get_node_or_null("../ShopUI")
+	if shop_ui and shop_ui.has_method("show_shop"):
+		shop_ui.show_shop()
 
 func update_timer(seconds: float) -> void:
 	if timer_label:
