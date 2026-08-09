@@ -37,7 +37,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			_on_main_menu_pressed()
 		elif event.keycode == KEY_N:
 			_on_next_pressed()
-		elif event.keycode == KEY_S:
+		elif event.keycode == KEY_F:
 			_on_shop_pressed()
 
 func _on_shop_pressed() -> void:

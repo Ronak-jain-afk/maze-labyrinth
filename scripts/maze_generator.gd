@@ -409,6 +409,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		generate_level(current_level)
 	elif event is InputEventKey and event.pressed and event.keycode == KEY_N:
 		generate_level(current_level + 1)
-	elif event is InputEventKey and event.pressed and event.keycode == KEY_S:
-		if shop_ui and shop_ui.has_method("show_shop"):
-			shop_ui.show_shop()
+	elif event is InputEventKey and event.pressed and event.keycode == KEY_F:
+		if shop_ui and shop_ui.has_method("toggle_shop"):
+			shop_ui.toggle_shop()

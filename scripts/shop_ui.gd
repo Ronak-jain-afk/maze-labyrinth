@@ -28,6 +28,20 @@ func hide_shop() -> void:
 	panel.hide()
 	shop_closed.emit()
 
+func toggle_shop() -> void:
+	if panel.visible:
+		hide_shop()
+	else:
+		show_shop()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not panel.visible:
+		return
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_F or event.keycode == KEY_ESCAPE:
+			hide_shop()
+			get_viewport().set_input_as_handled()
+
 func _update_ui() -> void:
 	var gs = get_node_or_null("/root/GameSettings")
 	if not gs:

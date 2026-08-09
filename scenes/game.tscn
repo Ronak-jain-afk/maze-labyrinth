@@ -182,7 +182,7 @@ size_flags_horizontal = 3
 
 [node name="ShopButton" type="Button" parent="HUD/MarginContainer/HudPanel/HBoxContainer" unique_id=888888904]
 layout_mode = 2
-text = "SHOP (S)"
+text = "SHOP (F)"
 
 [node name="Spacer6" type="Control" parent="HUD/MarginContainer/HudPanel/HBoxContainer" unique_id=888888905]
 layout_mode = 2
@@ -267,7 +267,7 @@ text = "Main Menu (Q)"
 
 [node name="ShopButton" type="Button" parent="VictoryUI/Control/PanelContainer/VBoxContainer/ButtonContainer" unique_id=777777786]
 layout_mode = 2
-text = "Relic Shop (S)"
+text = "Relic Shop (F)"
 
 [node name="NextButton" type="Button" parent="VictoryUI/Control/PanelContainer/VBoxContainer/ButtonContainer" unique_id=777777785]
 layout_mode = 2
