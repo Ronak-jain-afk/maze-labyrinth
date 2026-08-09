@@ -2,6 +2,52 @@
 
 [ext_resource type="Script" path="res://scripts/shop_ui.gd" id="1_shop"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shop_glass"]
+content_margin_left = 24.0
+content_margin_top = 24.0
+content_margin_right = 24.0
+content_margin_bottom = 24.0
+bg_color = Color(0.06, 0.1, 0.16, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.6, 0.9, 0.7)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.7)
+shadow_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.12, 0.2, 0.3, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.55, 0.8, 0.5)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.2, 0.35, 0.52, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.75, 1.0, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
 [node name="ShopUI" type="CanvasLayer"]
 layer = 5
 script = ExtResource("1_shop")
@@ -21,22 +67,23 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.7)
+color = Color(0.03, 0.05, 0.1, 0.6)
 
 [node name="PanelContainer" type="PanelContainer" parent="Control"]
-custom_minimum_size = Vector2(440, 320)
+custom_minimum_size = Vector2(460, 340)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -220.0
-offset_top = -160.0
-offset_right = 220.0
-offset_bottom = 160.0
+offset_left = -230.0
+offset_top = -170.0
+offset_right = 230.0
+offset_bottom = 170.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_shop_glass")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/PanelContainer"]
 layout_mode = 2
@@ -48,13 +95,17 @@ layout_mode = 2
 [node name="TitleLabel" type="Label" parent="Control/PanelContainer/VBoxContainer/HeaderContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_color = Color(1, 0.88, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 20
 text = "🏛️ MERCHANT RELIC SHOP"
 
 [node name="CoinsLabel" type="Label" parent="Control/PanelContainer/VBoxContainer/HeaderContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 0.9, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 16
 text = "COINS: 🪙 0"
 
@@ -80,13 +131,15 @@ text = "🗡️ Sharp Blade"
 
 [node name="Desc" type="Label" parent="Control/PanelContainer/VBoxContainer/RelicList/SharpBladeItem/Info"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_colors/font_color = Color(0.8, 0.85, 0.95, 0.85)
 theme_override_font_sizes/font_size = 11
 text = "+25% Attack Slash Area & Range"
 
 [node name="BuyButton" type="Button" parent="Control/PanelContainer/VBoxContainer/RelicList/SharpBladeItem"]
-custom_minimum_size = Vector2(110, 0)
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "BUY (150 🪙)"
 
 [node name="HermesBootsItem" type="HBoxContainer" parent="Control/PanelContainer/VBoxContainer/RelicList"]
@@ -104,13 +157,15 @@ text = "⚡ Boots of Hermes"
 
 [node name="Desc" type="Label" parent="Control/PanelContainer/VBoxContainer/RelicList/HermesBootsItem/Info"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_colors/font_color = Color(0.8, 0.85, 0.95, 0.85)
 theme_override_font_sizes/font_size = 11
 text = "+15% Permanent Hero Movement Speed"
 
 [node name="BuyButton" type="Button" parent="Control/PanelContainer/VBoxContainer/RelicList/HermesBootsItem"]
-custom_minimum_size = Vector2(110, 0)
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "BUY (200 🪙)"
 
 [node name="ParryMasterItem" type="HBoxContainer" parent="Control/PanelContainer/VBoxContainer/RelicList"]
@@ -128,13 +183,15 @@ text = "🛡️ Parry Master"
 
 [node name="Desc" type="Label" parent="Control/PanelContainer/VBoxContainer/RelicList/ParryMasterItem/Info"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_colors/font_color = Color(0.8, 0.85, 0.95, 0.85)
 theme_override_font_sizes/font_size = 11
 text = "Parry stuns enemies 2.5s and reflects damage"
 
 [node name="BuyButton" type="Button" parent="Control/PanelContainer/VBoxContainer/RelicList/ParryMasterItem"]
-custom_minimum_size = Vector2(110, 0)
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "BUY (250 🪙)"
 
 [node name="ExtraLifeItem" type="HBoxContainer" parent="Control/PanelContainer/VBoxContainer/RelicList"]
@@ -152,13 +209,15 @@ text = "💚 Extra Life Charm"
 
 [node name="Desc" type="Label" parent="Control/PanelContainer/VBoxContainer/RelicList/ExtraLifeItem/Info"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_colors/font_color = Color(0.8, 0.85, 0.95, 0.85)
 theme_override_font_sizes/font_size = 11
 text = "Prevents defeat once per maze level!"
 
 [node name="BuyButton" type="Button" parent="Control/PanelContainer/VBoxContainer/RelicList/ExtraLifeItem"]
-custom_minimum_size = Vector2(110, 0)
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "BUY (350 🪙)"
 
 [node name="HSeparator2" type="HSeparator" parent="Control/PanelContainer/VBoxContainer"]
@@ -166,4 +225,6 @@ layout_mode = 2
 
 [node name="CloseButton" type="Button" parent="Control/PanelContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "RETURN TO MAZE (Esc)"
