@@ -104,6 +104,7 @@ func _on_coin_collected(amount: int) -> void:
 	hud_ui.update_score(total_score)
 
 func generate_level(level_num: int) -> void:
+	get_tree().paused = false
 	current_level = level_num
 	
 	var w = base_maze_width + (level_num - 1) * 2
@@ -404,6 +405,7 @@ func _on_exit_area_body_entered(body: Node2D) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
+		get_tree().paused = false
 		get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 	elif event is InputEventKey and event.pressed and event.keycode == KEY_R:
 		generate_level(current_level)

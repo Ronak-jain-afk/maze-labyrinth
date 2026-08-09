@@ -13,6 +13,7 @@ signal shop_closed
 @onready var life_btn: Button = $Control/PanelContainer/VBoxContainer/RelicList/ExtraLifeItem/BuyButton
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	panel.hide()
 	close_btn.pressed.connect(hide_shop)
 	sharp_btn.pressed.connect(_buy_sharp_blade)
@@ -23,9 +24,11 @@ func _ready() -> void:
 func show_shop() -> void:
 	_update_ui()
 	panel.show()
+	get_tree().paused = true
 
 func hide_shop() -> void:
 	panel.hide()
+	get_tree().paused = false
 	shop_closed.emit()
 
 func toggle_shop() -> void:
