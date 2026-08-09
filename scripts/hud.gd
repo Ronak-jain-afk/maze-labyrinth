@@ -1,13 +1,13 @@
 extends CanvasLayer
 
-@onready var timer_label: Label = $MarginContainer/HBoxContainer/TimerLabel
-@onready var level_label: Label = $MarginContainer/HBoxContainer/LevelLabel
-@onready var steps_label: Label = $MarginContainer/HBoxContainer/StepsLabel
-@onready var score_label: Label = $MarginContainer/HBoxContainer/ScoreLabel
-@onready var dash_label: Label = $MarginContainer/HBoxContainer/DashLabel
-@onready var powerup_label: Label = $MarginContainer/HBoxContainer/PowerUpLabel
-@onready var key_label: Label = $MarginContainer/HBoxContainer/KeyLabel
-@onready var shop_btn: Button = $MarginContainer/HBoxContainer/ShopButton
+@onready var timer_label: Label = $MarginContainer/HudPanel/HBoxContainer/TimerLabel
+@onready var level_label: Label = $MarginContainer/HudPanel/HBoxContainer/LevelLabel
+@onready var steps_label: Label = $MarginContainer/HudPanel/HBoxContainer/StepsLabel
+@onready var score_label: Label = $MarginContainer/HudPanel/HBoxContainer/ScoreLabel
+@onready var dash_label: Label = $MarginContainer/HudPanel/HBoxContainer/DashLabel
+@onready var powerup_label: Label = $MarginContainer/HudPanel/HBoxContainer/PowerUpLabel
+@onready var key_label: Label = $MarginContainer/HudPanel/HBoxContainer/KeyLabel
+@onready var shop_btn: Button = $MarginContainer/HudPanel/HBoxContainer/ShopButton
 
 func _ready() -> void:
 	if shop_btn:
